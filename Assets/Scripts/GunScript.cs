@@ -21,6 +21,8 @@ public class GunScript : MonoBehaviour
     float gunCoolDown = 3f;
     bool isGunRolling;
 
+    [SerializeField]
+    Transform shootPoint;
     // Start is called before the first frame update
     void Start()
     {
@@ -100,7 +102,7 @@ public class GunScript : MonoBehaviour
     GameObject PickRandomBullet()
     {
         //Fisher Yates shuffle here then maybe reset once done
-        return BulletList[0];       //for now return first bullet in that list
+        return BulletList[Random.Range(0,BulletList.Count)];       //for now return first bullet in that list
     }
     void SpawnBullet()
     {
@@ -108,7 +110,7 @@ public class GunScript : MonoBehaviour
         {
             float spreadRange = Random.Range(-(spreadAngle*pelletCount), spreadAngle*pelletCount);
             Quaternion randomArc = Quaternion.Euler(0, 0, spreadRange);
-            GameObject bulletClone = Instantiate(PickRandomBullet(), transform.position, transform.rotation * randomArc);
+            GameObject bulletClone = Instantiate(PickRandomBullet(), shootPoint.position, transform.rotation * randomArc);
         }
     }
     bool FiftyPercent()
