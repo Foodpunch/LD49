@@ -5,9 +5,16 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class BulletScript : MonoBehaviour
 {
-    float bulletDamage;
-    float bulletSpeed = 5f;
+    /* Vague bullet rules
+     * -All bullets with bounce will not decay over time
+     * -All other bullets to decay in 5 seconds
+     */
+
+    float bulletDamage =1f;
+    [SerializeField]
+    float bulletSpeed = 8f;
     float explosionRadius = 2f;
+    [SerializeField]
     float timeToDisappear = 0f;
 
     float bulletAirTime;
@@ -21,7 +28,6 @@ public class BulletScript : MonoBehaviour
     int bounceCount =5;
     int pierceCount = 4;
 
-    public LayerMask layerMask;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +45,14 @@ public class BulletScript : MonoBehaviour
                 Despawn();
             }
         }
-        _rb.velocity = transform.right * bulletSpeed;
+        if (bulletAirTime >= 0.5f && isExplosive)
+        {
+            _rb.velocity = transform.right * bulletSpeed * 2f;
+        }
+        else
+        {
+            _rb.velocity = transform.right * bulletSpeed/2f;
+        }
 
     }
     void Despawn()
@@ -61,6 +74,7 @@ public class BulletScript : MonoBehaviour
             {
                 Rigidbody2D objRB = coll.GetComponent<Rigidbody2D>();
                 objRB.AddForce((objRB.transform.position - transform.position).normalized * 5f, ForceMode2D.Impulse);
+                SendDamage(coll);
             }
         }
     }
@@ -68,8 +82,8 @@ public class BulletScript : MonoBehaviour
     {
         if(collision!=null)
         {
+            SendDamage(collision);          
             RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right.normalized,1.5f);
-            // Debug.Log(hit.collider.name);
             if (hit.collider != null)
             {
                 if (hit.collider.gameObject.tag == "Obstacle" && isBouncy)
@@ -80,7 +94,6 @@ public class BulletScript : MonoBehaviour
                     bounceCount--;
                 }
             }
-           
             if (pierceCount > 0)
                 pierceCount--;
             else Despawn();
@@ -90,10 +103,7 @@ public class BulletScript : MonoBehaviour
     {
         if(collision !=null)
         {
-            foreach(ContactPoint2D contact in collision.contacts)
-            {
-
-            }
+            SendDamage(collision.collider);
             if (isBouncy)
             {
                 Vector2 inDir = transform.right;
@@ -105,9 +115,14 @@ public class BulletScript : MonoBehaviour
                 Despawn();
         }
     }
-    private void OnDrawGizmos()
+    void SendDamage(Collider2D col)
     {
-        Debug.DrawRay(transform.position, transform.right.normalized,Color.red);
-        Gizmos.DrawSphere(transform.position, explosionRadius);
+        //Debug.Log("trying to send damage to " + col.gameObject.name);
+        if(col.GetComponent<IDamageable>()!=null)
+        {
+            Debug.Log(col.gameObject.name + " has taken damage");
+            col.GetComponent<IDamageable>().OnTakeDamage(bulletDamage);
+        }
     }
 }
+

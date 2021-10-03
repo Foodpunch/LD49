@@ -49,7 +49,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 2
   m_SleepingMode: 1
@@ -67,13 +67,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc2527891dacfe74c9d10fd9f4c0642a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToDisappear: 0
   isBouncy: 0
   isPiercing: 0
   isExplosive: 1
   bounceCount: 5
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!70 &7368274753728750605
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -87,7 +85,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.15, y: 0}
+  m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.75, y: 0.25}
   m_Direction: 1
 --- !u!1 &7368274754422208711
@@ -161,7 +159,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4107299297984904772, guid: 7dc21e7994d068e4298ad3cbd3d7f542, type: 3}
+  m_Sprite: {fileID: -7802291051367623381, guid: 7dc21e7994d068e4298ad3cbd3d7f542, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

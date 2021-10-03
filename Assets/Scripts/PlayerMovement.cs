@@ -4,6 +4,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
+
+    public static PlayerMovement instance;
+
+
     public float moveSpeed;
     Rigidbody2D _rb;
 
@@ -17,13 +21,14 @@ public class PlayerMovement : MonoBehaviour
     Vector2 mouseDirection;
     //assuming player is using some capsule collider
 
+    private void Awake()
+    {
+        instance = this;
+    }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
-
     }
 
     // Update is called once per frame

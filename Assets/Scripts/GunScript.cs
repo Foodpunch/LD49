@@ -6,7 +6,7 @@ public class GunScript : MonoBehaviour
 {
     [SerializeField]
     float fireRate;                 //calculated by 1 second / fire rate (higher number means faster)
-    float spreadAngle =10f;         //determines bullet spread
+    float spreadAngle =8f;         //determines bullet spread
     [SerializeField]
     int pelletCount = 5;
     [SerializeField]
@@ -17,24 +17,34 @@ public class GunScript : MonoBehaviour
     [SerializeField]
     List<GameObject> BulletList = new List<GameObject>();
 
-    float stabilityMeter = 100f;                //each time you shoot, this value decreases. When the value hits 0, gun random rolls
-    float gunCoolDown = 3f;
-    bool isGunRolling;
+    [SerializeField]
+    int shotsBeforeChange;                      //number of shots before the gun rolls
+    int minShots = 2, maxShots = 20;            //Should tie it to the highest normal enemy hp
 
     [SerializeField]
     Transform shootPoint;
+
+    public bool isUnstableMode;
+    GameObject cachedBullet;
+    float cachedFireRate;
+    [SerializeField]
+    AnimationCurve fireRateVariance;
+    [SerializeField]
+    AnimationCurve pelletVariance;
+    
     // Start is called before the first frame update
     void Start()
     {
-        
+        shotsBeforeChange = Random.Range(minShots, maxShots + 1);
+        cachedBullet = BulletList[0];
+        cachedFireRate = fireRate;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(stabilityMeter <=0f)
+        if(shotsBeforeChange <=0)
         {
-            isGunRolling = true;
             RollGunStats();
         }
 
@@ -58,6 +68,10 @@ public class GunScript : MonoBehaviour
         {
             RollGunStats();
         }
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            isUnstableMode = !isUnstableMode;
+        }
     }
     void FireGun()
     {
@@ -70,33 +84,49 @@ public class GunScript : MonoBehaviour
     }
     void RollGunStats()
     {
-        stabilityMeter = 100f;
-        //int x = Random.Range(0, 101);     //determines firerate
-        //int y = Random.Range(0, 2);       //determines semi or auto
-        //int z = Random.Range(0, 2);       //determines multishot or not
+        shotsBeforeChange = Random.Range(minShots, maxShots + 1);
+        //fireRate = FiftyPercent() ? 1f : 5f;
+        //pelletCount = FiftyPercent() ? 1 : 5;
+        float x = Random.Range(0f, 1f);
+        float y = Random.Range(0f, 1f);
+        
+        fireRate = (fireRateVariance.Evaluate(y) * 7)+ cachedFireRate;      //magic number 3 because max firerate I'd possibly want is ~6 or 7
+        pelletCount = Mathf.RoundToInt(pelletVariance.Evaluate(x) * 5);         //max pellet count shouldddd be 5
+        if(pelletCount <1)
+        {
+            pelletCount = 1;
+        }
+        //int a = Random.Range(0, 91);
+        //int b = Random.Range(0, 91);
 
-        //Debug.Log(x);
-
-        //if(x <=20)
-        //{
-        //    fireRate = 5f;
-        //}
-        //else if(x <= 60)
+        //if(a < 30)
         //{
         //    fireRate = 1f;
         //}
+        //else if (a < 60)
+        //{
+        //    fireRate = 5f;
+        //}
         //else
         //{
-        //    fireRate = 3f;
+        //    fireRate = 8f;
         //}
-        //isAuto = (y == 1);
-        //pelletCount = (z == 1) ? 1 : 5;
 
-        fireRate = FiftyPercent() ? 1f : 5f;
-        //isAuto = FiftyPercent();
-        pelletCount = FiftyPercent() ? 1 : 5;
+        //if (b < 30)
+        //{
+        //    pelletCount = 1;
+        //}
+        //else if (b < 60)
+        //{
+        //    pelletCount = 3;
+        //}
+        //else
+        //{
+        //    pelletCount = 5;
+        //}
 
 
+        cachedBullet = PickRandomBullet();
 
     }
     GameObject PickRandomBullet()
@@ -106,12 +136,26 @@ public class GunScript : MonoBehaviour
     }
     void SpawnBullet()
     {
-        for(int i =0; i< pelletCount; i++)
+        if(isUnstableMode)
         {
-            float spreadRange = Random.Range(-(spreadAngle*pelletCount), spreadAngle*pelletCount);
-            Quaternion randomArc = Quaternion.Euler(0, 0, spreadRange);
-            GameObject bulletClone = Instantiate(PickRandomBullet(), shootPoint.position, transform.rotation * randomArc);
+            for (int i = 0; i < pelletCount; i++)
+            {
+                float spreadRange = Random.Range(-(spreadAngle * pelletCount), spreadAngle * pelletCount);
+                Quaternion randomArc = Quaternion.Euler(0, 0, spreadRange);
+                GameObject bulletClone = Instantiate(PickRandomBullet(), shootPoint.position, transform.rotation * randomArc);
+            }
         }
+        else
+        {
+            shotsBeforeChange--;
+            for (int i = 0; i < pelletCount; i++)
+            {
+                float spreadRange = Random.Range(-(spreadAngle * pelletCount), spreadAngle * pelletCount);
+                Quaternion randomArc = Quaternion.Euler(0, 0, spreadRange);
+                GameObject bulletClone = Instantiate(cachedBullet, shootPoint.position, transform.rotation * randomArc);
+            }
+        }
+
     }
     bool FiftyPercent()
     {
