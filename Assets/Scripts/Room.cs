@@ -14,7 +14,7 @@ public class Room : MonoBehaviour
 
 
     public List<GameObject> EnvironmentStuff;
-    public GameObject exitDoor;
+    public Door exitDoor;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +28,7 @@ public class Room : MonoBehaviour
         if(hasEntered)
         {
             ActivateAI();
+            if (isAllAIDead()) exitDoor.OpenSesame();
         }
         if(Input.GetKeyDown(KeyCode.M))
         {
@@ -37,6 +38,17 @@ public class Room : MonoBehaviour
                 EnvironmentStuff[i].GetComponent<Animator>().SetTrigger("glitch");
             }
         }
+    }
+    bool isAllAIDead()
+    {
+        for(int i=0; i< RoomEnemyList.Count;i++)
+        {
+            if(!RoomEnemyList[i].isDead)
+            {
+                return false;
+            }
+        }
+        return true;
     }
     void SpawnAI()
     {

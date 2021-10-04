@@ -26,4 +26,8 @@ public class Door : MonoBehaviour
             }
         }
     }
+    public void OpenSesame()
+    {
+        _anim.SetTrigger("Open");
+    }
 }

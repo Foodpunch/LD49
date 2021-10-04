@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc2527891dacfe74c9d10fd9f4c0642a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletDamage: 100
   bulletSpeed: 16
   timeToDisappear: 5
   isBouncy: 0

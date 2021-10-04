@@ -9,7 +9,7 @@ public class BulletScript : MonoBehaviour
      * -All bullets with bounce will not decay over time
      * -All other bullets to decay in 5 seconds
      */
-
+    [SerializeField]
     float bulletDamage =1f;
     [SerializeField]
     float bulletSpeed = 8f;

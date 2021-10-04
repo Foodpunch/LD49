@@ -5,13 +5,14 @@ using System;
 
 public class Enemy : MonoBehaviour,IDamageable
 {
-    int maxHP = 10;
-    public int currHP;
+    float maxHP = 10f;
+    public float currHP;
     public int moveSpeed;
     public float fireRate;
     public float gunCooldown = 3f;
 
     public bool isActive;
+    public bool isDead;
 
     public int gunCount = 3;
 
@@ -153,7 +154,7 @@ public class Enemy : MonoBehaviour,IDamageable
     public void OnTakeDamage(float damage)
     {
         //take hit anim here
-        currHP--;
+        currHP-=damage;
         if(currHP <=0)
         {
             Die();
@@ -161,6 +162,7 @@ public class Enemy : MonoBehaviour,IDamageable
     }
     void Die()
     {
+        isDead = true;
         if(deathEvent != null)
         {
             deathEvent();
