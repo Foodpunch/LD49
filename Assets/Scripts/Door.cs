@@ -5,6 +5,7 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     Animator _anim;
+    bool isOpen;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,12 +23,15 @@ public class Door : MonoBehaviour
         {
             if(collision.tag == "Player")
             {
-                _anim.SetTrigger("Open");
+                OpenSesame();
             }
         }
     }
     public void OpenSesame()
     {
+        if (!isOpen) AudioManager.instance.PlaySoundAtLocation(AudioManager.instance.MiscSounds[1], 0.3f, transform.position);
+        isOpen = true;
         _anim.SetTrigger("Open");
+     
     }
 }

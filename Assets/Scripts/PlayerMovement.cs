@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class PlayerMovement : MonoBehaviour
     Vector2 mouseDirection;
     //assuming player is using some capsule collider
 
+    float maxHp = 20;
+    public float currHP;
+    public bool isDead;
+    public Image playerHPBar;
     private void Awake()
     {
         instance = this;
@@ -29,19 +34,29 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        currHP = maxHp;
     }
 
     // Update is called once per frame
     void Update()
     {
         //if ! game paused
-        PlayerMovementInput();
-        SetGunToFaceMouse();
+        if(!isDead || !RoomManager.instance.isBossDead)
+        {
+            PlayerMovementInput();
+            SetGunToFaceMouse();
+        }
+        UpdateHP();
     }
     private void FixedUpdate()
     {
         _rb.MovePosition(_rb.position + moveVelocity * Time.fixedDeltaTime);
        // _rb.velocity = moveVelocity;
+    }
+    void UpdateHP()
+    {
+        
+        playerHPBar.fillAmount = currHP / maxHp;
     }
     void PlayerMovementInput()
     {
@@ -59,5 +74,18 @@ public class PlayerMovement : MonoBehaviour
         //Hacky sprite flip here
         float angle = gunHolder.transform.rotation.eulerAngles.z;
         gunSprite.flipY = (angle > 90f && angle < 270f);        //angle goes from 0 to 360. 
+    }
+    public void TakeDamage(float damage)
+    {
+        currHP -= damage;
+        if(currHP <= 0)
+        {
+            isDead = true;
+        }
+    }
+    public void AddHP(float health)
+    {
+        currHP += health;
+        if (currHP > maxHp) currHP = maxHp;
     }
 }

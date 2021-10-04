@@ -159,11 +159,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052c365bf4ece484592a85aee43a4816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currHP: 10
+  maxHP: 5
+  currHP: 5
   moveSpeed: 5
   fireRate: 3
   gunCooldown: 3
   isActive: 0
+  isDead: 0
   gunCount: 1
   gunHolder: {fileID: 8676928033655342687}
   enemyGun: {fileID: 7097121953734377361, guid: ef878c76f8fb42c48b3be95c3dc93142, type: 3}

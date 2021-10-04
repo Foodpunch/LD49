@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class EnemyBullet : MonoBehaviour
 {
+    public float bulletDamage = 1f;
     Rigidbody2D _rb;
     float timeToDisappear = 3.5f;
     float bulletSpeed = 2f;
@@ -31,7 +32,7 @@ public class EnemyBullet : MonoBehaviour
         {
             if (collision.gameObject.tag == "Player")
             {
-              //  Debug.Log(gameObject.name + " has hit the player");
+                collision.gameObject.GetComponent<PlayerMovement>().TakeDamage(bulletDamage);
             }
             _rb.Sleep();
             gameObject.SetActive(false);

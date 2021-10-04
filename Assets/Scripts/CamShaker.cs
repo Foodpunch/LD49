@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using NaughtyAttributes;
 public class CamShaker : MonoBehaviour
 {
 
@@ -14,6 +14,7 @@ public class CamShaker : MonoBehaviour
     [SerializeField] float traumaRotMag = 17f; //the rotational power
     [SerializeField] float traumaDecay = 1.3f; //how quickly the shake falls off
 
+    public static CamShaker instance;
 
     float timeCounter = 0; //counter stored for smooth transition
     public float Trauma //accessor is used to keep trauma within 0 to 1 range
@@ -40,6 +41,10 @@ public class CamShaker : MonoBehaviour
         return new Vector3(GetFloat(1), GetFloat(10)) ;
     }
 
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Update()
     {
         if (camShakeAcive && Trauma > 0)
@@ -63,9 +68,11 @@ public class CamShaker : MonoBehaviour
             //transform.localPosition = ogPos;
             //transform.localRotation = Quaternion.identity;
         }
-        if(Input.GetKeyDown(KeyCode.H))
-        {
-            Trauma += 0.5f;
-        }
+
+    }
+    [Button]
+    void Shake()
+    {
+        Trauma += 0.5f;
     }
 }

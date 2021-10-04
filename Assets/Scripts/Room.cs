@@ -9,17 +9,14 @@ public class Room : MonoBehaviour
     bool hasEntered;
 
     public List<Transform> EnemySpawns;
-    public List<Transform> PropSpawns;
     public List<Enemy> RoomEnemyList;
 
 
-    public List<GameObject> EnvironmentStuff;
     public Door exitDoor;
     // Start is called before the first frame update
     void Start()
     {
         SpawnAI();
-
     }
 
     // Update is called once per frame
@@ -30,14 +27,14 @@ public class Room : MonoBehaviour
             ActivateAI();
             if (isAllAIDead()) exitDoor.OpenSesame();
         }
-        if(Input.GetKeyDown(KeyCode.M))
-        {
-            for(int i=0; i< EnvironmentStuff.Count; i++)
-            {
-                if(EnvironmentStuff[i].GetComponent<Animator>()!=null)
-                EnvironmentStuff[i].GetComponent<Animator>().SetTrigger("glitch");
-            }
-        }
+        //if(Input.GetKeyDown(KeyCode.M))
+        //{
+        //    for(int i=0; i< EnvironmentStuff.Count; i++)
+        //    {
+        //        if(EnvironmentStuff[i].GetComponent<Animator>()!=null)
+        //        EnvironmentStuff[i].GetComponent<Animator>().SetTrigger("glitch");
+        //    }
+        //}
     }
     bool isAllAIDead()
     {

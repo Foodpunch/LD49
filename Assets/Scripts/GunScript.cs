@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using NaughtyAttributes;
 public class GunScript : MonoBehaviour
 {
     [SerializeField]
@@ -31,7 +31,17 @@ public class GunScript : MonoBehaviour
     AnimationCurve fireRateVariance;
     [SerializeField]
     AnimationCurve pelletVariance;
-    
+
+    public bool hasFireRateCore;
+    public bool hasMultiShotCore;
+    public bool hasBulletCore;
+
+    public static GunScript instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -64,10 +74,10 @@ public class GunScript : MonoBehaviour
         }
 
         //testing stuff
-        if(Input.GetMouseButtonDown(1))
-        {
-            RollGunStats();
-        }
+        //if(Input.GetMouseButtonDown(1))
+        //{
+        //    RollGunStats();
+        //}
         if(Input.GetKeyDown(KeyCode.G))
         {
             isUnstableMode = !isUnstableMode;
@@ -82,51 +92,25 @@ public class GunScript : MonoBehaviour
             nextTimeToFire = Time.time + (1f / fireRate);
         }
     }
-    void RollGunStats()
+    [Button]
+    public void RollGunStats()
     {
+        AudioManager.instance.PlayCachedSound(AudioManager.instance.ReloadSounds, transform.position, 0.3f);
         shotsBeforeChange = Random.Range(minShots, maxShots + 1);
-        //fireRate = FiftyPercent() ? 1f : 5f;
-        //pelletCount = FiftyPercent() ? 1 : 5;
         float x = Random.Range(0f, 1f);
         float y = Random.Range(0f, 1f);
         
-        fireRate = (fireRateVariance.Evaluate(y) * 7)+ cachedFireRate;      //magic number 3 because max firerate I'd possibly want is ~6 or 7
+        if(hasFireRateCore)
+            fireRate = (fireRateVariance.Evaluate(y) * 7)+ cachedFireRate;      //magic number 3 because max firerate I'd possibly want is ~6 or 7
+        if(hasMultiShotCore)
         pelletCount = Mathf.RoundToInt(pelletVariance.Evaluate(x) * 5);         //max pellet count shouldddd be 5
         if(pelletCount <1)
         {
             pelletCount = 1;
         }
-        //int a = Random.Range(0, 91);
-        //int b = Random.Range(0, 91);
-
-        //if(a < 30)
-        //{
-        //    fireRate = 1f;
-        //}
-        //else if (a < 60)
-        //{
-        //    fireRate = 5f;
-        //}
-        //else
-        //{
-        //    fireRate = 8f;
-        //}
-
-        //if (b < 30)
-        //{
-        //    pelletCount = 1;
-        //}
-        //else if (b < 60)
-        //{
-        //    pelletCount = 3;
-        //}
-        //else
-        //{
-        //    pelletCount = 5;
-        //}
-
-
-        cachedBullet = PickRandomBullet();
+      
+        if(hasBulletCore)
+            cachedBullet = PickRandomBullet();
 
     }
     GameObject PickRandomBullet()
@@ -136,8 +120,10 @@ public class GunScript : MonoBehaviour
     }
     void SpawnBullet()
     {
+
         if(isUnstableMode)
         {
+            shotsBeforeChange--;
             for (int i = 0; i < pelletCount; i++)
             {
                 float spreadRange = Random.Range(-(spreadAngle * pelletCount), spreadAngle * pelletCount);
@@ -147,6 +133,8 @@ public class GunScript : MonoBehaviour
         }
         else
         {
+            if(hasBulletCore) AudioManager.instance.PlayCachedSound(AudioManager.instance.ShootSounds, transform.position, 0.2f);
+            else AudioManager.instance.PlaySoundAtLocation(AudioManager.instance.ShootSounds[0], transform.position);
             shotsBeforeChange--;
             for (int i = 0; i < pelletCount; i++)
             {

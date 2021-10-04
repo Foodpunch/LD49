@@ -26,12 +26,14 @@ public class BulletScript : MonoBehaviour
 
     [SerializeField]
     int bounceCount =5;
-    int pierceCount = 4;
+    [SerializeField]
+    int pierceCount = 3;
 
     // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        if (isExplosive) AudioManager.instance.PlaySoundAtLocation(AudioManager.instance.MiscSounds[0],0.2f,transform.position);
     }
 
     // Update is called once per frame
@@ -60,6 +62,7 @@ public class BulletScript : MonoBehaviour
         if (isExplosive) Explode();
         _rb.Sleep();
         gameObject.SetActive(false);
+        VFXManager.instance.Poof(transform.position);
     }
 
 
@@ -67,6 +70,8 @@ public class BulletScript : MonoBehaviour
     void Explode()
     {
         //spawn particle here
+        AudioManager.instance.PlayCachedSound(AudioManager.instance.ExplosionSounds, transform.position,0.2f);
+        CamShaker.instance.Trauma += 0.2f;
         Collider2D[] explosionHits = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
         foreach(Collider2D coll in explosionHits)
         {
@@ -104,6 +109,11 @@ public class BulletScript : MonoBehaviour
         if(collision !=null)
         {
             SendDamage(collision.collider);
+            if (collision.collider.GetComponent<IDamageable>() == null)
+            {
+                AudioManager.instance.PlayCachedSound(AudioManager.instance.ImpactSounds, transform.position, 0.2f);
+                VFXManager.instance.Spark(transform.position, collision.contacts[0].normal);
+            }
             if (isBouncy)
             {
                 Vector2 inDir = transform.right;
@@ -118,10 +128,10 @@ public class BulletScript : MonoBehaviour
     void SendDamage(Collider2D col)
     {
         //Debug.Log("trying to send damage to " + col.gameObject.name);
-        if(col.GetComponent<IDamageable>()!=null)
+        if (col.GetComponent<IDamageable>() != null)
         {
-            Debug.Log(col.gameObject.name + " has taken damage");
             col.GetComponent<IDamageable>().OnTakeDamage(bulletDamage);
+            AudioManager.instance.PlaySoundAtLocation(AudioManager.instance.MiscSounds[3], 0.2f, transform.position, true);
         }
     }
 }

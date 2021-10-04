@@ -5,7 +5,7 @@ using System;
 
 public class Enemy : MonoBehaviour,IDamageable
 {
-    float maxHP = 10f;
+    public float maxHP = 10f;
     public float currHP;
     public int moveSpeed;
     public float fireRate;
@@ -61,7 +61,7 @@ public class Enemy : MonoBehaviour,IDamageable
     void Update()
     {
         enemyTimer += Time.deltaTime;
-        if(isActive)
+        if(isActive && !isDead)
         {
 
             if (isTrackingPlayer)
@@ -149,11 +149,13 @@ public class Enemy : MonoBehaviour,IDamageable
         for (int i=0; i< EnemyGunList.Count; i++)
         {
             EnemyGunList[i].Fire();
+            AudioManager.instance.PlaySoundAtLocation(AudioManager.instance.MiscSounds[4], transform.position);
         }
     }
     public void OnTakeDamage(float damage)
     {
         //take hit anim here
+        AudioManager.instance.PlayCachedSound(AudioManager.instance.EnemyHurtSounds,transform.position,0.4f);
         currHP-=damage;
         if(currHP <=0)
         {
@@ -162,6 +164,7 @@ public class Enemy : MonoBehaviour,IDamageable
     }
     void Die()
     {
+        AudioManager.instance.PlaySoundAtLocation(AudioManager.instance.MiscSounds[2], 0.2f, transform.position, true);
         isDead = true;
         if(deathEvent != null)
         {
