@@ -12,9 +12,9 @@ public class Room : MonoBehaviour
     public List<Transform> PropSpawns;
     public List<Enemy> RoomEnemyList;
 
-    int enemyCount;
 
     public List<GameObject> EnvironmentStuff;
+    public GameObject exitDoor;
     // Start is called before the first frame update
     void Start()
     {
