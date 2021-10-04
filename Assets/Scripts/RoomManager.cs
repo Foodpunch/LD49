@@ -39,7 +39,7 @@ public class RoomManager : MonoBehaviour
         }
         if(PlayerMovement.instance.isDead)
         {
-            gameOver.alpha += Time.deltaTime / 3f;
+            gameOver.alpha += Time.deltaTime;
             gameOver.interactable = true;
         }
         if (isBossDead)
@@ -71,6 +71,10 @@ public class RoomManager : MonoBehaviour
         PlayerMovement.instance.TakeDamage(5f);
     }
     public void ReloadGame()
+    {
+        SceneManager.LoadScene(1);
+    }
+    public void MainMenu()
     {
         SceneManager.LoadScene(0);
     }

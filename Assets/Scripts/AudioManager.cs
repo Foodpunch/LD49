@@ -13,8 +13,10 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource BGMSource;
     public AudioSource GameOverSource;
+    public AudioSource BossBGMSource;
 
     public bool isGameOver;
+    public bool isBossTime;
     float fadeTime = 0f;
 
     //hard code babeyyy~
@@ -49,6 +51,21 @@ public class AudioManager : MonoBehaviour
         //        GameOverSource.Play();
         //    }
         //}
+        if (isBossTime && !isGameOver)
+        {
+            fadeTime += Time.deltaTime;
+            if (fadeTime < 1f)
+            {
+                BGMSource.volume = Mathf.Lerp(0.234f, 0f, fadeTime);
+                BossBGMSource.volume = Mathf.Lerp(0, 0.234f, fadeTime);
+                BossBGMSource.Play();
+            }
+        }
+        if(isGameOver)
+        {
+            BGMSource.volume -= Time.deltaTime/5f;
+            BossBGMSource.volume -= Time.deltaTime/5f;
+        }
     }
 
     //default volume is 0.3f

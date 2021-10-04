@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour,IDamageable
     public float minMoveTime = 0.5f, maxMoveTime = 1f;
 
     public event Action deathEvent;
-
+    public Animator anim;
     Rigidbody2D _rb;
     // Start is called before the first frame update
     void Start()
@@ -155,6 +155,7 @@ public class Enemy : MonoBehaviour,IDamageable
     public void OnTakeDamage(float damage)
     {
         //take hit anim here
+        anim.SetTrigger("hurt");
         AudioManager.instance.PlayCachedSound(AudioManager.instance.EnemyHurtSounds,transform.position,0.4f);
         currHP-=damage;
         if(currHP <=0)

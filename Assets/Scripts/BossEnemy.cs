@@ -25,9 +25,9 @@ public class BossEnemy : MonoBehaviour,IDamageable
 
     Vector3 cachedPos;
     Vector3 lastSummonedPos;
-    float summonTimer;
     float nextTimeToSummon =5f;
     public List<Enemy> SpawnedEnemyList = new List<Enemy>();
+    public Animator anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -104,6 +104,8 @@ public class BossEnemy : MonoBehaviour,IDamageable
     }
     public void OnTakeDamage(float damage)
     {
+        anim.SetTrigger("hurt");
+        AudioManager.instance.PlayCachedSound(AudioManager.instance.EnemyHurtSounds, transform.position, 0.4f,true);
         health -= damage;
         if(health <=0)
         {

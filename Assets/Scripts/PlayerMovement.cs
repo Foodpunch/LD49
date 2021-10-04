@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     public float currHP;
     public bool isDead;
     public Image playerHPBar;
+    public Animator playerAnim;
     private void Awake()
     {
         instance = this;
@@ -78,7 +79,9 @@ public class PlayerMovement : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currHP -= damage;
-        if(currHP <= 0)
+        playerAnim.SetTrigger("hurt");
+        AudioManager.instance.PlaySoundAtLocation(AudioManager.instance.MiscSounds[6], 0.3f, transform.position);
+        if (currHP <= 0)
         {
             isDead = true;
         }

@@ -62,16 +62,11 @@ public class GunScript : MonoBehaviour
         {
             if(Input.GetMouseButton(0))
             {
-                FireGun();
+                if(!RoomManager.instance.isBossDead && !PlayerMovement.instance.isDead)
+                    FireGun();
             }
         }
-        else
-        {
-            if(Input.GetMouseButtonDown(0))
-            {
-                FireGun();
-            }
-        }
+  
 
         //testing stuff
         //if(Input.GetMouseButtonDown(1))

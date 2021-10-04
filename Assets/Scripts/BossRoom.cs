@@ -9,7 +9,7 @@ public class BossRoom : MonoBehaviour
     bool bossSpawned;
     public BossEnemy bossObj;
     public CanvasGroup BossHPGroup;
-    float fadeIntime;
+    float fadeIntime=-2.5f;
 
     public Transform BossSpawnPoint;
     BossEnemy cachedBoss;
@@ -47,6 +47,7 @@ public class BossRoom : MonoBehaviour
         cachedBoss = Instantiate(bossObj, BossSpawnPoint.position, Quaternion.identity);
         cachedBoss.isActive = true;
         startBossSequence = true;
+        AudioManager.instance.isBossTime = true;
     }
 
 }

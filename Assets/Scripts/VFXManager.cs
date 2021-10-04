@@ -19,6 +19,11 @@ public class VFXManager : MonoBehaviour
     {
         Instantiate(VFXObjects[0], pos, Quaternion.identity);
     }
+    public void Boom(Vector3 pos)
+    {
+        Quaternion test = Quaternion.Euler(0, 0, Random.Range(0, 360));
+        Instantiate(VFXObjects[2], pos,test);
+    }
     public void Spark(Vector3 pos, Vector3 normal)
     {
         GameObject spark = Instantiate(VFXObjects[1], pos, Quaternion.identity);

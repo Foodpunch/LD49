@@ -70,6 +70,7 @@ public class BulletScript : MonoBehaviour
     void Explode()
     {
         //spawn particle here
+        VFXManager.instance.Boom(transform.position);
         AudioManager.instance.PlayCachedSound(AudioManager.instance.ExplosionSounds, transform.position,0.2f);
         CamShaker.instance.Trauma += 0.2f;
         Collider2D[] explosionHits = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
