@@ -157,7 +157,7 @@ MonoBehaviour:
   gunCooldown: 3
   isActive: 0
   isDead: 0
-  gunCount: 1
+  gunCount: 3
   gunHolder: {fileID: 4744028849157457222}
   enemyGun: {fileID: 7097121953734377361, guid: ef878c76f8fb42c48b3be95c3dc93142, type: 3}
   EnemyGunList: []

@@ -43957,6 +43957,8 @@ MonoBehaviour:
   - {fileID: 1942116753886349605, guid: 582fd90dfd8b702468e3ff59f8a82c4c, type: 3}
   - {fileID: 2869885623944116589, guid: d46b11f6c02407149a1bb4da18a3d4d4, type: 3}
   - {fileID: 4744028848829589270, guid: 06a71cf0fab0d7240b2f2e17a346bdf9, type: 3}
+  - {fileID: 2869885623944116589, guid: 1d994845ec09cc047ae930d1cd09f509, type: 3}
+  - {fileID: 8676928034762863119, guid: a0a75d603b4602541bbe074660a0f9c8, type: 3}
   isBossDead: 0
   gameOver: {fileID: 1006823774}
   victory: {fileID: 453419061}
