@@ -41,6 +41,7 @@ public class RoomManager : MonoBehaviour
         {
             gameOver.alpha += Time.deltaTime;
             gameOver.interactable = true;
+            victory.gameObject.SetActive(false);
         }
         if (isBossDead)
         {
